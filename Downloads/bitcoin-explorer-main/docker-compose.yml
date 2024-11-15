@@ -17,7 +17,7 @@ services:
   backend:
     build:
       context: ./bitcoin_data_ingestion  # 指定构建上下文
-      dockerfile: Dockerfile  # 明确指定 Dockerfile 名称
+      dockerfile: Dockerfile  # 明确指定 Dockerfile 名称11
     depends_on:
       - mysql
     ports:
