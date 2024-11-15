@@ -16,7 +16,7 @@ function App() {
     useEffect(() => {
         async function fetchInitialData() {
             try {
-                const response = await axios.get('http://34.46.63.139:3030/latest_blocks');
+                const response = await axios.get('http://34.44.123.189:3030/latest_blocks');
                 const formattedData = response.data.map((item: any) => ({
                     ...item,
                     time: new Date().toLocaleTimeString(),
@@ -32,7 +32,7 @@ function App() {
 
     // WebSocket 连接
     useEffect(() => {
-        const socket = new WebSocket('ws://34.46.63.139:3030/ws');
+        const socket = new WebSocket('ws://34.44.123.189:3030/ws');
 
         socket.onmessage = (event) => {
             console.log("WebSocket message received: ", event.data);
