@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 
 interface DataPoint {
@@ -74,19 +74,16 @@ function App() {
         <div className="App">
             <h1 className="title">Our Bitcoin Explorer</h1>
 
-            {/* Line chart for data trend */}
+            {/* Bar chart for price data */}
             {data.length > 0 ? (
                 <ResponsiveContainer width="95%" height={400}>
-                    <LineChart data={data}>
+                    <BarChart data={data}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="time" />
                         <YAxis />
                         <Tooltip />
-                        <Legend />
-                        <Line type="monotone" dataKey="peer_count" stroke="#4c99ff" activeDot={{ r: 8 }} />
-                        <Line type="monotone" dataKey="medium_fee_per_kb" stroke="#66b3ff" />
-                        <Line type="monotone" dataKey="price" stroke="#33ccff" />
-                    </LineChart>
+                        <Bar dataKey="price" fill="#33ccff" />
+                    </BarChart>
                 </ResponsiveContainer>
             ) : (
                 <p>Waiting for data...</p>
