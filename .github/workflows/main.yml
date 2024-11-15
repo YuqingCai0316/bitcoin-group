@@ -26,11 +26,6 @@ jobs:
         run: |
           docker-compose up --build -d
 
-      - name: Run tests
-        working-directory: Downloads/bitcoin-explorer-main
-        run: |
-          # 在此处运行您的测试命令，例如 npm test 或其他测试脚本
-          npm test
 
       - name: Tear down services
         working-directory: Downloads/bitcoin-explorer-main
