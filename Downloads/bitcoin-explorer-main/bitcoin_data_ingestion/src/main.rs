@@ -28,7 +28,7 @@ async fn fetch_blockchain_data() -> Result<(i32, f64)> {
     let response = client.get("https://api.blockcypher.com/v1/btc/main").send().await?;
     let json: Value = response.json().await?;
 
-    println!("Received JSON: {:?}", json);
+    println!("Received JSON: {:?}", json);  // 日志打印，确认接收到的数据
 
     let peer_count = json["peer_count"].as_i64().ok_or(anyhow::anyhow!("Peer count field missing or invalid"))? as i32;
     let medium_fee_per_kb = json["medium_fee_per_kb"].as_f64().ok_or(anyhow::anyhow!("Medium fee per KB field missing or invalid"))?;
@@ -46,6 +46,9 @@ async fn fetch_bitcoin_price() -> Result<f64> {
         .send()
         .await?;
     let json: Value = response.json().await?;
+    
+    println!("Received Bitcoin price from API: {:?}", json);  // 日志打印，确认接收到比特币价格
+
     Ok(json["bitcoin"]["usd"].as_f64().unwrap())
 }
 
@@ -142,8 +145,12 @@ async fn main() {
 
     tokio::spawn(async move {
         loop {
+            println!("Fetching blockchain data...");  // 添加日志，确认定时任务是否在运行
+
             match fetch_blockchain_data().await {
                 Ok((peer_count, medium_fee_per_kb)) => {
+                    println!("Fetched data: Peer count: {}, Medium fee per KB: {}", peer_count, medium_fee_per_kb);  // 添加日志，确认数据是否正确
+
                     conn.exec_drop(
                         "INSERT INTO blocks (peer_count, medium_fee_per_kb, price) VALUES (:peer_count, :medium_fee_per_kb, :price)",
                         params! {
@@ -167,7 +174,7 @@ async fn main() {
                     } else {
                         println!("Broadcasted message: {}", message);
                     }
-                    println!("Inserted: Peer Count: {}, Medium Fee per KB: {}, Price: {}", peer_count, medium_fee_per_kb, price);
+                    println!("Inserted: Peer Count: {}, Medium Fee per KB: {}, Price: {}", peer_count, medium_fee_per_kb, price);  // 添加日志，确认插入操作成功
                 }
                 Err(e) => {
                     println!("Failed to fetch blockchain data: {}", e);
