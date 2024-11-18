@@ -1,3 +1,39 @@
+# services:
+#   mysql:
+#     image: mysql:5.7
+#     restart: always
+#     environment:
+#       MYSQL_ROOT_PASSWORD: Ywy20010917.  # 设置 MySQL root 用户的密码
+#       MYSQL_DATABASE: help_bitcoin      # 可以在启动时创建的数据库
+#       MYSQL_USER: caitlynn                # 创建用户
+#       MYSQL_PASSWORD: 123456          # 创建用户的密码
+#     ports:
+#       - "3308:3306"
+#     volumes:
+#       - mysql-data:/var/lib/mysql
+
+#   backend:
+#     build:
+#       context: ./bitcoin_data_ingestion  # 指定构建上下文
+#       dockerfile: Dockerfile  # 明确指定 Dockerfile 名称11
+#     depends_on:
+#       - mysql
+#     ports:
+#       - "3030:3030" 
+      
+
+#   frontend:
+#     build:
+#       context: ./bitcoin_ui  # 指定构建上下文
+#       dockerfile: Dockerfile  # 明确指定 Dockerfile 名称
+#     ports:
+#       - "80:80"  # NGINX 在80端口提供服务
+#     depends_on:
+#       - backend
+# volumes:
+#   mysql-data: {}
+version: '3.8'
+
 services:
   mysql:
     image: mysql:5.7
@@ -5,30 +41,34 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: Ywy20010917.  # 设置 MySQL root 用户的密码
       MYSQL_DATABASE: help_bitcoin      # 可以在启动时创建的数据库
-      MYSQL_USER: caitlynn                # 创建用户
-      MYSQL_PASSWORD: 123456          # 创建用户的密码
+      MYSQL_USER: caitlynn              # 创建用户
+      MYSQL_PASSWORD: 123456            # 创建用户的密码
     ports:
-      - "3308:3306"
+      - "3308:3306"                     # 本地端口3308映射到MySQL容器的3306端口
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql       # 持久化存储MySQL数据
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s                     # 每隔10秒检查一次
+      timeout: 5s                       # 超时时间为5秒
+      retries: 5                        # 重试5次
 
   backend:
     build:
-      context: ./bitcoin_data_ingestion  # 指定构建上下文
-      dockerfile: Dockerfile  # 明确指定 Dockerfile 名称11
+      context: ./bitcoin_data_ingestion # 后端服务的构建上下文
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy     # 等待MySQL服务健康后启动
     ports:
-      - "3030:3030" 
-      
+      - "3030:3030"                    # 本地端口3030映射到后端服务的3030端口
 
   frontend:
     build:
-      context: ./bitcoin_ui  # 指定构建上下文
-      dockerfile: Dockerfile  # 明确指定 Dockerfile 名称
+      context: ./bitcoin_ui            # 前端服务的构建上下文
     ports:
-      - "80:80"  # NGINX 在80端口提供服务
+      - "80:80"                        # 本地端口80映射到前端服务的80端口
     depends_on:
-      - backend
+      - backend                        # 前端依赖后端服务
+
 volumes:
   mysql-data: {}
