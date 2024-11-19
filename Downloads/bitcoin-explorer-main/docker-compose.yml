@@ -39,7 +39,7 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: Ywy20010917.  # 设置 MySQL root 用户的密码
+      MYSQL_ROOT_PASSWORD: Hsh65249852@.  # 设置 MySQL root 用户的密码
       MYSQL_DATABASE: help_bitcoin      # 可以在启动时创建的数据库
       MYSQL_USER: caitlynn              # 创建用户
       MYSQL_PASSWORD: 123456            # 创建用户的密码
