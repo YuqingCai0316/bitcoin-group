@@ -111,7 +111,7 @@ async fn main() {
             }
         });
 
-    let url = "mysql://caitlynn:123456@34.44.123.189:3308/help_bitcoin";
+    let url = "mysql://hsh123:123456@34.44.123.189:3308/help_bitcoin";
     let pool = loop {
         match Pool::new(url) {
             Ok(pool) => break pool,
