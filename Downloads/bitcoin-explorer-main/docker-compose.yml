@@ -39,9 +39,9 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 123456  # 设置 MySQL root 用户的密码
+      MYSQL_ROOT_PASSWORD: Ywy20010917.  # 设置 MySQL root 用户的密码
       MYSQL_DATABASE: help_bitcoin      # 可以在启动时创建的数据库
-      MYSQL_USER: hsh123              # 创建用户
+      MYSQL_USER: caitlynn              # 创建用户
       MYSQL_PASSWORD: 123456            # 创建用户的密码
     ports:
       - "3308:3306"                     # 本地端口3308映射到MySQL容器的3306端口
